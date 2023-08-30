@@ -8,7 +8,7 @@ iOS/macOS media picker for importing images and videos in SwiftUI.
 2. Add the following line to the Package's `dependencies` array in your `Package.swift` file:
 
 ```swift
-.package(url: "https://github.com/UWAppDev/SwiftUI-MediaPicker", from: "0.2.0"),
+.package(url: "https://github.com/Azapp/SwiftUI-MediaPicker", from: "0.2.0"),
 ```
 
 3. Include this library as a dependency for your executable target:
