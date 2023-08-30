@@ -71,7 +71,7 @@ public extension View {
         self.mediaImporter(
             isPresented: isPresented,
             allowedMediaTypes: allowedMediaTypes,
-            allowsMultipleSelection: false,
+            selectionLimit: 0,
             onCompletion: { result in
                 onCompletion(result.map { $0.first! })
             },
@@ -105,13 +105,13 @@ public extension View {
     func mediaImporter(
         isPresented: Binding<Bool>,
         allowedMediaTypes: MediaTypeOptions,
-        allowsMultipleSelection: Bool,
+        selectionLimit: Int,
         onCompletion: @escaping (Result<[URL], Error>) -> Void
     ) -> some View {
         self.mediaImporter(
             isPresented: isPresented,
             allowedMediaTypes: allowedMediaTypes,
-            allowsMultipleSelection: allowsMultipleSelection,
+            selectionLimit: selectionLimit,
             onCompletion: onCompletion,
             loadingOverlay: DefaultLoadingOverlay.init
         )
@@ -120,7 +120,7 @@ public extension View {
     func mediaImporter<LoadingOverlay: View>(
         isPresented: Binding<Bool>,
         allowedMediaTypes: MediaTypeOptions,
-        allowsMultipleSelection: Bool,
+        selectionLimit: Int,
         onCompletion: @escaping (Result<[URL], Error>) -> Void,
         @ViewBuilder loadingOverlay: @escaping (Progress) -> LoadingOverlay
     ) -> some View {
@@ -128,7 +128,7 @@ public extension View {
         return self.mediaImporter(
             isPresented: isPresented,
             allowedMediaTypes: allowedMediaTypes,
-            allowsMultipleSelection: allowsMultipleSelection
+            selectionLimit: selectionLimit
         ) { (result: Result<[PHPickerResult], Error>) in
             switch result {
             case .success(let phPickerResults):
@@ -151,12 +151,18 @@ public extension View {
 fileprivate struct DefaultLoadingOverlay: View {
     let progress: Progress
     var body: some View {
-        NavigationView {
-            ProgressView(progress)
-                .padding()
-                .navigationTitle("Importing Media...")
+        ZStack {
+            VStack {
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle(tint: Color.primary))
+                    .scaleEffect(1.5)
+                    .foregroundColor(.primary)
+                    .padding(25)
+            }
+            .background(Color.white)
+            .cornerRadius(8)
+            .shadow(color: .black.opacity(0.08), radius: 15, x: 0, y: 5)
         }
-        .transition(.move(edge: .bottom).combined(with: .opacity))
     }
 }
 

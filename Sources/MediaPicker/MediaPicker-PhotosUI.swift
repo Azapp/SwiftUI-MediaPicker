@@ -21,12 +21,12 @@ public extension View {
     func mediaImporter<LoadingOverlay: View>(
         isPresented: Binding<Bool>,
         allowedMediaTypes: MediaTypeOptions,
-        allowsMultipleSelection: Bool,
+        selectionLimit: Int,
         onCompletion: @escaping (Result<[PHPickerResult], Error>) -> Void,
         @ViewBuilder loadingOverlay: @escaping () -> LoadingOverlay
     ) -> some View {
         var configuration = PHPickerConfiguration(photoLibrary: .shared())
-        configuration.selectionLimit = allowsMultipleSelection ? 0 : 1
+        configuration.selectionLimit = selectionLimit
         configuration.filter = PHPickerFilter.from(allowedMediaTypes)
         
         return sheet(isPresented: isPresented) {
